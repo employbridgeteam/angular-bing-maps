@@ -67,11 +67,20 @@ function pushpinDirective() {
     return {
         link: link,
         controller: ['$scope', function ($scope) {
-            this.pin = new Microsoft.Maps.Pushpin({ latitude: $scope.options.lat, longitude: $scope.options.lng }, {
-                icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
-                anchor: new Microsoft.Maps.Point(12, 39)
-            });
-            $scope.pin = this.pin;
+            if ($scope.options != undefined) {
+                this.pin = new Microsoft.Maps.Pushpin({ latitude: $scope.options.lat, longitude: $scope.options.lng }, {
+                    icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
+                    anchor: new Microsoft.Maps.Point(12, 39)
+                });
+                $scope.pin = this.pin;
+            }
+            else {
+                this.pin = new Microsoft.Maps.Pushpin({ latitude: $scope.lat, longitude: $scope.lng }, {
+                    icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
+                    anchor: new Microsoft.Maps.Point(12, 39)
+                });
+                $scope.pin = this.pin;
+            }
         }],
         template: '<div ng-transclude></div>',
         restrict: 'EA',

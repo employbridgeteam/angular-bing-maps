@@ -577,29 +577,38 @@ function pushpinDirective() {
         });
     }
 
-        return {
-            link: link,
-            controller: ['$scope', function ($scope) {
+    return {
+        link: link,
+        controller: ['$scope', function ($scope) {
+            if ($scope.options != undefined) {
                 this.pin = new Microsoft.Maps.Pushpin({ latitude: $scope.options.lat, longitude: $scope.options.lng }, {
                     icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
                     anchor: new Microsoft.Maps.Point(12, 39)
                 });
                 $scope.pin = this.pin;
-            }],
-            template: '<div ng-transclude></div>',
-            restrict: 'EA',
-            transclude: true,
-            scope: {
-                options: '=?',
-                lat: '=',
-                lng: '=',
-                events: '=?',
-                trackBy: '=?',
-                pushpinData: '=?'
-            },
-            require: '^bingMap'
-        };
-    }
+            }
+            else {
+                this.pin = new Microsoft.Maps.Pushpin({ latitude: $scope.lat, longitude: $scope.lng }, {
+                    icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
+                    anchor: new Microsoft.Maps.Point(12, 39)
+                });
+                $scope.pin = this.pin;
+            }
+        }],
+        template: '<div ng-transclude></div>',
+        restrict: 'EA',
+        transclude: true,
+        scope: {
+            options: '=?',
+            lat: '=',
+            lng: '=',
+            events: '=?',
+            trackBy: '=?',
+            pushpinData: '=?'
+        },
+        require: '^bingMap'
+    };
+}
 
 angular.module('angularBingMaps.directives').directive('pushpin', pushpinDirective);
 
