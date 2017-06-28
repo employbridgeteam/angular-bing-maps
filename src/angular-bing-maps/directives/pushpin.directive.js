@@ -1,4 +1,4 @@
-/*global angular, Microsoft, DrawingTools, console*/
+﻿/*global angular, Microsoft, DrawingTools, console*/
 
 function pushpinDirective() {
     'use strict';
@@ -16,8 +16,8 @@ function pushpinDirective() {
 
         updatePosition();
         mapCtrl.map.entities.push(scope.pin);
-        scope.$watch('lat', updatePosition);
-        scope.$watch('lng', updatePosition);
+        scope.$watch('lat', updatePosition());
+        scope.$watch('lng', updatePosition());
         scope.$watch('options', function (newOptions) {
             scope.pin.setOptions(newOptions);
         });
@@ -67,7 +67,10 @@ function pushpinDirective() {
     return {
         link: link,
         controller: ['$scope', function ($scope) {
-            this.pin = new Microsoft.Maps.Pushpin();
+            this.pin = new Microsoft.Maps.Pushpin({ latitude: $scope.options.lat, longitude: $scope.options.lng }, {
+                icon: 'https://www.bingmapsportal.com/Content/images/poi_custom.png',
+                anchor: new Microsoft.Maps.Point(12, 39)
+            });
             $scope.pin = this.pin;
         }],
         template: '<div ng-transclude></div>',
@@ -83,7 +86,6 @@ function pushpinDirective() {
         },
         require: '^bingMap'
     };
-
 }
 
 angular.module('angularBingMaps.directives').directive('pushpin', pushpinDirective);
